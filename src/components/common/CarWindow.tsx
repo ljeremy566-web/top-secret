@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useState, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Stage, ContactShadows } from '@react-three/drei';
 import { MustangModel } from './MustangModel';
 import garageImage from '../../images/Garaje.png';
@@ -8,24 +8,45 @@ interface CarWindowProps {
     tintLevel: number; // 0 = clear, 1 = light, 2 = medium, 3 = dark, 4 = limo
 }
 
+const ContextLostHandler = ({ onContextLost }: { onContextLost: () => void }) => {
+    const { gl } = useThree();
+
+    useEffect(() => {
+        const handleLost = () => onContextLost();
+        const handleRestored = () => onContextLost();
+
+        gl.domElement.addEventListener('webglcontextlost', handleLost);
+        gl.domElement.addEventListener('webglcontextrestored', handleRestored);
+
+        return () => {
+            gl.domElement.removeEventListener('webglcontextlost', handleLost);
+            gl.domElement.removeEventListener('webglcontextrestored', handleRestored);
+        };
+    }, [gl, onContextLost]);
+
+    return null;
+};
+
 const CarWindow = ({ tintLevel }: CarWindowProps) => {
+    const [canvasKey, setCanvasKey] = useState(0);
     return (
-        // Increased size: w/h 320->500px (mobile) and 420->600px (desktop) approximately
         <div
-            className="w-[350px] h-[350px] md:w-[550px] md:h-[550px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl  relative"
+            className="w-[350px] h-[350px] md:w-[550px] md:h-[550px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative"
             style={{
                 backgroundImage: `url(${garageImage})`,
                 backgroundSize: '260%',
                 backgroundPosition: '50% 75%',
-
-
             }}
         >
-            {/* Tuned camera FOV and Position for max impact without cutting off */}
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [4, 1.5, 5], fov: 30 }}>
+            <Canvas
+                key={canvasKey}
+                shadows
+                dpr={[1, 2]}
+                camera={{ position: [4, 1.5, 5], fov: 30 }}
+            >
+                <ContextLostHandler onContextLost={() => setCanvasKey((k) => k + 1)} />
                 <Suspense fallback={null}>
                     <Stage environment="city" intensity={0.6}>
-                        {/* Scaled model slightly up, and applied new premium body color (Gunmetal Grey) */}
                         <MustangModel tintLevel={tintLevel} scale={1.2} />
                     </Stage>
                     <ContactShadows

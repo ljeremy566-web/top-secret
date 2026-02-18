@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logoImg from '../../images/Logo.png';
 
@@ -8,28 +9,31 @@ const Header = () => {
     return (
         <nav className="w-full h-16 px-4 md:px-8 flex items-center justify-between relative z-50 pt-4 md:pt-15">
             {/* Logo */}
-            <div className="cursor-pointer z-50">
+            <Link to="/" className="cursor-pointer z-50">
                 <img
                     src={logoImg}
                     alt="Legacy Window Tinting"
                     className="h-12 md:h-16 lg:h-40 w-auto object-contain transition-all duration-300"
                 />
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-10">
-                <div className="flex gap-10 text-xs font-semibold tracking-widest text-white uppercase">
-                    <a href="#contact" className="hover:text-[#FF9F1C] transition-colors">
+                <div className="flex gap-10 text-sm font-semibold tracking-widest text-white uppercase">
+                    <Link to="/" className="hover:text-[#FF9F1C] transition-colors">
+                        Home
+                    </Link>
+                    <Link to="/#contact" className="hover:text-[#FF9F1C] transition-colors">
                         Contact Us
-                    </a>
-                    <a href="#services" className="hover:text-[#FF9F1C] transition-colors">
+                    </Link>
+                    <Link to="/services" className="hover:text-[#FF9F1C] transition-colors">
                         Services
-                    </a>
+                    </Link>
                 </div>
 
-                <button className="border-2 border-[#FF9F1C] bg-transparent hover:bg-[#FF9F1C] text-white hover:text-black text-xs font-black px-5 py-2 tracking-widest uppercase transition-all cursor-pointer">
+                <Link to="/schedule" className="border-2 border-[#FF9F1C] bg-transparent hover:bg-[#FF9F1C] text-white hover:text-black text-xs font-black px-5 py-2 tracking-widest uppercase transition-all cursor-pointer">
                     Schedule Now
-                </button>
+                </Link>
 
                 <a
                     href="https://wa.me/1234567890"
@@ -74,26 +78,27 @@ const Header = () => {
                 className={`fixed inset-0 bg-black/95 backdrop-blur-md z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col items-center justify-center gap-8 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
-                <a
-                    href="#contact"
+                <Link
+                    to="/#contact"
                     onClick={() => setIsMenuOpen(false)}
                     className="text-2xl font-bold text-white hover:text-[#FF9F1C] uppercase tracking-widest transition-colors"
                 >
                     Contact Us
-                </a>
-                <a
-                    href="#services"
+                </Link>
+                <Link
+                    to="/services"
                     onClick={() => setIsMenuOpen(false)}
                     className="text-2xl font-bold text-white hover:text-[#FF9F1C] uppercase tracking-widest transition-colors"
                 >
                     Services
-                </a>
-                <button
+                </Link>
+                <Link
+                    to="/schedule"
                     onClick={() => setIsMenuOpen(false)}
                     className="border-2 border-[#FF9F1C] bg-transparent hover:bg-[#FF9F1C] text-white hover:text-black text-xl font-black px-8 py-3 tracking-widest uppercase transition-all"
                 >
                     Schedule Now
-                </button>
+                </Link>
             </div>
         </nav>
     );

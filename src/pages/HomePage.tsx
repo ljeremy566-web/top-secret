@@ -1,6 +1,7 @@
 import Header from '../components/common/Header';
 import HeroSection from '../components/common/HeroSection';
 import ServicesSection from '../components/common/ServicesSection';
+import PromotionSection from '../components/common/PromotionSection';
 import TintOptionsSection from '../components/common/TintOptionsSection';
 
 const HomePage = () => {
@@ -14,10 +15,12 @@ const HomePage = () => {
                 }}
             />
             <div className="relative z-10">
+
                 <Header />
                 <HeroSection />
                 <ServicesSection />
                 <TintOptionsSection />
+                <PromotionSection />
             </div>
         </div>
     );
