@@ -39,8 +39,10 @@ interface MustangModelProps {
 }
 
 // Default to a vibrant Red to make the tint pop
+const MODEL_URL = `${import.meta.env.BASE_URL}mustang/scene.gltf`;
+
 export function MustangModel({ tintLevel, bodyColor = '#d62828', ...props }: MustangModelProps & JSX.IntrinsicElements['group']) {
-    const { nodes, materials } = useGLTF('/mustang/scene.gltf') as unknown as GLTFResult;
+    const { nodes, materials } = useGLTF(MODEL_URL) as unknown as GLTFResult;
 
     // ─── Custom Materials ───
 
@@ -249,4 +251,4 @@ export function MustangModel({ tintLevel, bodyColor = '#d62828', ...props }: Mus
     );
 }
 
-useGLTF.preload('/mustang/scene.gltf');
+useGLTF.preload(MODEL_URL);

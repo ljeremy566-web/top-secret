@@ -3,7 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { MainLayout } from './components/layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
-import SchedulePage from './pages/SchedulePage'; // Import SchedulePage
+import SchedulePage from './pages/SchedulePage';
 import PageTransition from './components/common/PageTransition';
 
 function App() {

@@ -3,14 +3,11 @@ import Marquee from 'react-fast-marquee';
 
 interface PromotionCardsProps {
     title: string;
-    description: string;
     imageSrc: string;
     imageAlt: string;
-    barPosition: 'left' | 'right' | 'middle';
-
 }
 
-const PromotionCards = ({ title, description, imageSrc, imageAlt, }: PromotionCardsProps) => {
+const PromotionCards = ({ title, imageSrc, imageAlt, }: PromotionCardsProps) => {
     if (!imageSrc) return null;
     return (
         <div className="flex flex-col items-center">
@@ -39,7 +36,7 @@ const PromotionCards = ({ title, description, imageSrc, imageAlt, }: PromotionCa
 export default function PromotionSection() {
     return (
         <>
-            <section id="promotion" className="w-full mx-auto px-4 py-16 [filter:drop-shadow(0px_0px_10px_#FF9F1C)] border-[#FF9F1C] border overflow-x-hidden animate-pulse scale-105">
+            <section id="promotion" className="w-full max-w-full mx-auto px-4 py-16 [filter:drop-shadow(0px_0px_10px_#FF9F1C)] border-[#FF9F1C] border overflow-hidden animate-pulse">
                 <Marquee speed={120} className='overflow-hidden'>
                     <p className="text-5xl font-bold uppercase tracking-wider ml-16 text-transparent [-webkit-text-stroke:2px_#FF9F1C]">Promotions</p>
                     <p className="text-5xl text-[#FF9F1C] font-bold uppercase tracking-wider ml-16">Promotions</p>
@@ -54,10 +51,8 @@ export default function PromotionSection() {
             <section>
                 <PromotionCards
                     title=""
-                    description=""
                     imageSrc=""
                     imageAlt=""
-                    barPosition="left"
                 />
             </section>
         </>

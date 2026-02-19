@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import CarWindow from './CarWindow';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+
+const LazyCarWindow = lazy(() => import('./CarWindow'));
 
 interface TintOption {
     level: number;
@@ -18,9 +19,30 @@ const TINT_OPTIONS: TintOption[] = [
 
 const TintOptionsSection = () => {
     const [selectedTint, setSelectedTint] = useState(0);
+    const [shouldLoad3D, setShouldLoad3D] = useState(false);
+    const sectionRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        if (shouldLoad3D) return;
+        const node = sectionRef.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries.some((entry) => entry.isIntersecting)) {
+                    setShouldLoad3D(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '200px' }
+        );
+
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [shouldLoad3D]);
 
     return (
-        <section className="container mx-auto px-4 py-20">
+        <section ref={sectionRef} className="container mx-auto px-4 py-20">
             {/* Section heading */}
             <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold italic text-white mb-3">
@@ -34,7 +56,17 @@ const TintOptionsSection = () => {
             <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
                 {/* Car window preview */}
                 <div className="flex-shrink-0">
-                    <CarWindow tintLevel={selectedTint} />
+                    {shouldLoad3D ? (
+                        <Suspense
+                            fallback={
+                                <div className="w-[350px] h-[350px] md:w-[550px] md:h-[550px] rounded-2xl border border-white/10 shadow-2xl bg-white/5" />
+                            }
+                        >
+                            <LazyCarWindow tintLevel={selectedTint} />
+                        </Suspense>
+                    ) : (
+                        <div className="w-[350px] h-[350px] md:w-[550px] md:h-[550px] rounded-2xl border border-white/10 shadow-2xl bg-white/5" />
+                    )}
                 </div>
 
                 {/* 2. Selector de Niveles (Options) */}

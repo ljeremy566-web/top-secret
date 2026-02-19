@@ -1,8 +1,17 @@
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, lazy } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, Stage, ContactShadows } from '@react-three/drei';
 import { MustangModel } from './MustangModel';
 import garageImage from '../../images/Garaje.png';
+
+const LazyStage = lazy(() =>
+    import('@react-three/drei').then((mod) => ({ default: mod.Stage }))
+);
+const LazyOrbitControls = lazy(() =>
+    import('@react-three/drei').then((mod) => ({ default: mod.OrbitControls }))
+);
+const LazyContactShadows = lazy(() =>
+    import('@react-three/drei').then((mod) => ({ default: mod.ContactShadows }))
+);
 
 interface CarWindowProps {
     tintLevel: number; // 0 = clear, 1 = light, 2 = medium, 3 = dark, 4 = limo
@@ -46,10 +55,12 @@ const CarWindow = ({ tintLevel }: CarWindowProps) => {
             >
                 <ContextLostHandler onContextLost={() => setCanvasKey((k) => k + 1)} />
                 <Suspense fallback={null}>
-                    <Stage environment="city" intensity={0.6}>
+                    <LazyStage environment="city" intensity={0.6}>
                         <MustangModel tintLevel={tintLevel} scale={1.2} />
-                    </Stage>
-                    <ContactShadows
+                    </LazyStage>
+                </Suspense>
+                <Suspense fallback={null}>
+                    <LazyContactShadows
                         position={[0, -0.01, 0]}
                         opacity={0.6}
                         scale={15}
@@ -58,16 +69,18 @@ const CarWindow = ({ tintLevel }: CarWindowProps) => {
                         color="black"
                     />
                 </Suspense>
-                <OrbitControls
-                    makeDefault
-                    enableDamping={true}
-                    enableZoom={false}
-                    enablePan={false}
-                    minPolarAngle={0}
-                    maxPolarAngle={Math.PI / 2.1}
-                    autoRotate
-                    autoRotateSpeed={0.5}
-                />
+                <Suspense fallback={null}>
+                    <LazyOrbitControls
+                        makeDefault
+                        enableDamping={true}
+                        enableZoom={false}
+                        enablePan={false}
+                        minPolarAngle={0}
+                        maxPolarAngle={Math.PI / 2.1}
+                        autoRotate
+                        autoRotateSpeed={0.5}
+                    />
+                </Suspense>
             </Canvas>
         </div>
     );

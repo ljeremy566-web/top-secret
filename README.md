@@ -71,3 +71,9 @@ export default defineConfig([
   },
 ])
 ```
+
+## Deployment Notes
+
+- SPA routing requires a fallback to `index.html` on your hosting (otherwise `/services` or `/schedule` will 404 on refresh).
+- If deploying under a subpath, set `base` in `vite.config.ts` and ensure `BASE_URL` is set accordingly. The router uses `basename={import.meta.env.BASE_URL}` and assets load via `BASE_URL`.
+- Define required env vars at build time: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY`.
